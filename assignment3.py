@@ -32,5 +32,36 @@ def get_minimum_variance_portfolios(lowerBound, upperBound, number):
 
 result = get_minimum_variance_portfolios(0, 0.2, 400)
 
+
+
+def get_minimum_variance_Portfolio():
+    minimum = result[1][0]
+    index = 0
+    for x in range(400):
+        if (result[1][x] < minimum):
+            minimum = result[1][x]
+            index = x
+    print("MVP:")
+    print(result[0][index])
+    print(minimum)
+    print(result[2][index])
+
+def get_tangency_portfolio():
+    maximum = (result[0][0] - 0.02) / result[1][0]
+    index = 0
+    for x in range(400):
+        if ((result[0][x] - 0.02) / result[1][x] > maximum):
+            maximum = (result[0][x] - 0.02) / result[1][x]
+            index = x
+    print("TP:")
+    print(result[0][index])
+    print(result[1][index])
+    print(result[2][index])
+
+    cal = 0.02 + (result[0][index] - 0.02) / result[1][index] * result[1]
+    pp.plot(result[1], cal)
+
+get_minimum_variance_Portfolio()
+get_tangency_portfolio()
 pp.plot(result[1], result[0])
 pp.show()
