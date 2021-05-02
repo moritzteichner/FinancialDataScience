@@ -1,13 +1,14 @@
 import numpy as np
 import matplotlib.pyplot as pp
 
-cov_matrix = np.array([[0.4, 0.00128], [0.00128, 0.2]])
+cov_matrix = np.array([[0.0256, 0.00128], [0.00128, 0.0016]])
 returns = np.array([0.08, 0.03])
 einheitsvektor = np.array([1,1])
+inverse = np.linalg.inv(cov_matrix)
 
 def get_minimum_variance_portfolios(lowerBound, upperBound, number):
 
-    inverse = np.linalg.inv(cov_matrix)
+
     X = returns.dot(inverse.dot(returns))
     Y = returns.dot(inverse.dot(einheitsvektor))
     Z = einheitsvektor.dot(inverse.dot(einheitsvektor))
@@ -32,7 +33,19 @@ def get_minimum_variance_portfolios(lowerBound, upperBound, number):
 
 result = get_minimum_variance_portfolios(0, 0.2, 400)
 
+print("100th PF:")
+print(result[2][199])
+print(result[0][199])
+print(result[1][199])
 
+def get_mvp_arithmetically():
+    weights = inverse.dot(einheitsvektor) / (einheitsvektor.T.dot(inverse.dot(einheitsvektor)))
+    m = weights.dot(returns)
+    s = np.sqrt(weights.dot(cov_matrix.dot(weights)))
+    print("Arith:")
+    print(weights)
+    print(m)
+    print(s)
 
 def get_minimum_variance_Portfolio():
     minimum = result[1][0]
@@ -42,9 +55,10 @@ def get_minimum_variance_Portfolio():
             minimum = result[1][x]
             index = x
     print("MVP:")
+    print(result[2][index])
     print(result[0][index])
     print(minimum)
-    print(result[2][index])
+
 
 def get_tangency_portfolio():
     maximum = (result[0][0] - 0.02) / result[1][0]
@@ -54,6 +68,7 @@ def get_tangency_portfolio():
             maximum = (result[0][x] - 0.02) / result[1][x]
             index = x
     print("TP:")
+    print(maximum)
     print(result[0][index])
     print(result[1][index])
     print(result[2][index])
@@ -62,6 +77,7 @@ def get_tangency_portfolio():
     pp.plot(result[1], cal)
 
 get_minimum_variance_Portfolio()
+get_mvp_arithmetically()
 get_tangency_portfolio()
 pp.plot(result[1], result[0])
 pp.show()
